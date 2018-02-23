@@ -1,0 +1,31 @@
+{
+    "parser": "babel-eslint",
+    "extends": "airbnb",
+    "rules": {
+      "comma-dangle": ["error", "never"],
+      "import/extensions": 0,
+      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+      "jsx-a11y/anchor-is-valid": [ "error", {
+        "components": [ "Link" ],
+        "specialLink": [ "to" ]
+      }],
+      "linebreak-style": 0,
+      "max-len": 0,
+      "no-new": 0,
+      "no-plusplus": 0
+    },
+    "settings": {
+      "import/resolver": {
+        "node": {
+          "paths": ["src"]
+        }
+      }
+    },
+    "globals": {
+      "document": true,
+      "window": true,
+      "location": true,
+      "React": true,
+      "PropTypes": true
+    }
+  }
