@@ -21,13 +21,12 @@ class BooksApp extends Component {
     })
   }
 
-  updateBookListState = (bookId, shelfStatus) => {
-    return this.state.BookList.filter(b => {
+  updateBookListState = (bookId, bookList, shelfStatus) => {
+    console.debug(shelfStatus);
+    return bookList.filter(b => {
       console.debug(b.id, bookId);
-      if(b.id === bookId && shelfStatus !== 'none') {
+      if(b.id === bookId) {
         b.shelf = shelfStatus;
-      } else {
-        return;
       }
       return b;
     });
@@ -41,9 +40,17 @@ class BooksApp extends Component {
     });
 
     BooksAPI.update(book, shelfStatus).then(BookList => {
-      const updatedBook = shelfStatus === 'none' ? book.id : BookList[shelfStatus].filter(b => b === book.id)[0];
+      let updatedBookList = [...this.state.BookList];
+      if(shelfStatus === 'none') {
+        updatedBookList = updatedBookList.filter( b => b.id !== book.id );
+      } else {
+        updatedBookList = this.updateBookListState( BookList[shelfStatus].filter(b => b === book.id)[0], updatedBookList, shelfStatus );
+      }
+
+      console.debug(updatedBookList);
+
       this.setState({
-        BookList: this.updateBookListState(updatedBook, shelfStatus),
+        BookList: updatedBookList,
         loading: false
       });
     });
@@ -60,6 +67,7 @@ class BooksApp extends Component {
       <div className="app">
         <Route exact path="/" render={() => (
           <ListBooks
+            bookList={this.state.BookList}
             loadingState={loadingState}
             currentlyReadingList={currentlyReadingList}
             wantToReadList={wantToReadList}
@@ -70,6 +78,7 @@ class BooksApp extends Component {
         />
         <Route path="/search" render={() => (
           <SearchPage
+            BookList={this.state.BookList}
             updateReadingList={(book, e) => this.updateReadingList(book, e)}
           />
           )}

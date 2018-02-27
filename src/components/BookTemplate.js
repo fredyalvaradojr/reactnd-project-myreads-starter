@@ -1,15 +1,26 @@
 import React from 'react';
 
 const BookTemplate = (props) => {
-  console.debug(props, props.shelf);
+
+  let shelfStatus;
+  if (props.bookListInformation !== undefined) {
+    const shelfStatusItem = props.bookListInformation.filter(b =>  b.title === props.title );
+    shelfStatus = shelfStatusItem.length === 0 ? 'none' : shelfStatusItem[0].shelf;
+  }
+  else {
+    shelfStatus = props.shelf !== undefined ? props.shelf : 'none';
+  }
+
+  const thumbnail = props.imageLinks !== undefined ? props.imageLinks.thumbnail : '';
+
   return (
     <li>
       <div className="book">
         <div className="book-top">
-          <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${props.imageLinks.thumbnail}")` }} />
+          <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${thumbnail}")` }} />
           <div className="book-shelf-changer">
-            <select value={ props.shelf !== undefined ? props.shelf : 'none'} onChange={(e) => props.updateReadingList(props, e)}>
-              <option value="none" disabled>Move to...</option>
+            <select value={shelfStatus} onChange={(e) => props.updateReadingList(props, e)}>
+              <option value="moveTo" disabled>Move to...</option>
               <option value="currentlyReading">Currently Reading</option>
               <option value="wantToRead">Want to Read</option>
               <option value="read">Read</option>

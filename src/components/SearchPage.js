@@ -14,17 +14,16 @@ class SearchPage extends Component {
   }
 
   onSearch = (e) => {
-    const searchQuery = e.target.value;
+    const searchQuery = e.target.value.length > 0 ? e.target.value : ' ';
     BooksAPI.search(searchQuery).then( searchContent => {
       this.setState({ searchResults: searchContent });
     });
   }
 
   render() {
-    console.debug(this.state.searchResults);
     let bookSearchList = '';
-    if(this.state.searchResults.length > 0) {
-      bookSearchList = this.state.searchResults.map(b => <BookTemplate key={b.id} updateReadingList={(book, e) => this.props.updateReadingList(book, e)} {...b} />);
+    if(this.state.searchResults && this.state.searchResults.length > 0) {
+      bookSearchList = this.state.searchResults.map(b => <BookTemplate key={b.id} updateReadingList={(book, e) => this.props.updateReadingList(book, e)} bookListInformation={this.props.BookList} {...b} />);
     }
     return (
       <div className="search-books">
