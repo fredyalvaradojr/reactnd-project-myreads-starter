@@ -9,69 +9,78 @@ class BooksApp extends Component {
 
   state = {
     BookList: [],
-    loading: true
+    initLoading: true,
+    loading: false
   }
 
   componentDidMount() {
     BooksAPI.getAll().then(BookList => {
       this.setState({
         BookList,
-        loading: false
-      });
+        initLoading: false
+      })
     })
   }
 
-  updateBookListState = (bookId, bookList, shelfStatus) => {
-    console.debug(shelfStatus);
-    return bookList.filter(b => {
-      console.debug(b.id, bookId);
-      if(b.id === bookId) {
-        b.shelf = shelfStatus;
-      }
-      return b;
-    });
-  }
-
   updateReadingList = (book, e) => {
-    const shelfStatus = e.target.value;
+    let shelfStatus = e.target.value;
+    let bookListTemp;
 
     this.setState({
       loading: true
-    });
+    })
 
-    BooksAPI.update(book, shelfStatus).then(BookList => {
-      let updatedBookList = [...this.state.BookList];
-      if(shelfStatus === 'none') {
-        updatedBookList = updatedBookList.filter( b => b.id !== book.id );
-      } else {
-        updatedBookList = this.updateBookListState( BookList[shelfStatus].filter(b => b === book.id)[0], updatedBookList, shelfStatus );
+    if (shelfStatus !== 'none') {
+      let idFound = false;
+
+      bookListTemp = this.state.BookList.map( b => {
+        if (book.id === b.id) {
+          idFound = true;
+          b.shelf = shelfStatus;
+        }
+        return b;
+      })
+
+      if(!idFound) {
+        book.shelf = shelfStatus;
+        bookListTemp.push(book);
       }
 
-      console.debug(updatedBookList);
+    } else {
+      bookListTemp = this.state.BookList.filter( b => book.id !== b.id).map( b => b);
+    }
 
+    BooksAPI.update(book, shelfStatus).then( results => {
       this.setState({
-        BookList: updatedBookList,
+        BookList: bookListTemp,
         loading: false
-      });
-    });
+      })
+    })
+
   }
 
   render() {
-    const loadingState = this.state.loading ? '' : 'list-books--loading_hide';
-    const currentlyReadingList = this.state.BookList.filter(book => book.shelf === 'currentlyReading');
-    const wantToReadList = this.state.BookList.filter(book => book.shelf === 'wantToRead');
-    const readList = this.state.BookList.filter(book => book.shelf === 'read');
-    const noneList = this.state.BookList.filter(book => book.shelf === 'none');
+    const initLoadingState = this.state.initLoading ? (
+        <div className='list-books--init-loading'>
+          <span className="sr-only">loading...</span>
+          <div className="list-books--init-loading_animation" aria-hidden="true" />
+        </div>
+      ) : '';
+
+    const loadingState = this.state.loading ? (
+      <div className='list-books--loading'>
+        <span className="sr-only">loading...</span>
+        <div className="list-books--loading_animation" aria-hidden="true" />
+      </div>
+      ) : '';
 
     return (
       <div className="app">
+        {initLoadingState}
+        {loadingState}
         <Route exact path="/" render={() => (
           <ListBooks
             bookList={this.state.BookList}
-            loadingState={loadingState}
-            currentlyReadingList={currentlyReadingList}
-            wantToReadList={wantToReadList}
-            readList={readList}
             updateReadingList={(book, e) => this.updateReadingList(book, e)}
           />
           )}

@@ -10,20 +10,29 @@ class SearchPage extends Component {
   }
 
   state = {
-    searchResults: []
+    searchResults: [],
+    searchQueryValue: ''
   }
 
   onSearch = (e) => {
-    const searchQuery = e.target.value.length > 0 ? e.target.value : ' ';
-    BooksAPI.search(searchQuery).then( searchContent => {
-      this.setState({ searchResults: searchContent });
-    });
+    const realQueryValue = e.target.value;
+
+    this.setState({ searchQueryValue: realQueryValue });
+
+    if (realQueryValue !== '') {
+      BooksAPI.search(realQueryValue).then( searchContent => {
+        this.state.searchQueryValue !== '' ? this.setState({ searchResults: searchContent }) : this.setState({ searchResults: [] });
+      });
+    }
+    else {
+      this.setState({ searchResults: [] });
+    }
   }
 
   render() {
     let bookSearchList = '';
     if(this.state.searchResults && this.state.searchResults.length > 0) {
-      bookSearchList = this.state.searchResults.map(b => <BookTemplate key={b.id} updateReadingList={(book, e) => this.props.updateReadingList(book, e)} bookListInformation={this.props.BookList} {...b} />);
+      bookSearchList = this.state.searchResults.map(b => <BookTemplate key={b.id} updateReadingList={(book, e) => this.props.updateReadingList(book, e)} bookListInformation={this.props.BookList} thisBookInfo={b} />);
     }
     return (
       <div className="search-books">
@@ -35,7 +44,7 @@ class SearchPage extends Component {
             Close
           </Link>
           <div className="search-books-input-wrapper">
-            <input type="text" onChange={this.onSearch} placeholder="Search by title or author"/>
+            <input type="text" onChange={this.onSearch} value={this.state.searchQueryValue} placeholder="Search by title or author"/>
           </div>
         </div>
         <div className="search-books-results">
