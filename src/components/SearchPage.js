@@ -5,10 +5,6 @@ import BookTemplate from './BookTemplate';
 
 class SearchPage extends Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   state = {
     searchResults: [],
     searchQueryValue: ''
