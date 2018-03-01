@@ -206,16 +206,46 @@ body, .app {
 .list-books--init-loading_animation,
 .list-books--loading_animation {
   display: inline-block;
-  width: 15%;
-  height: 15%;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   background: #fff;
   animation: lds-circle 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
   position: absolute;
   top: 50%;
   left: 50%;
-  margin-left: -8%;
-  margin-top: -8%
+  margin-left: -35px;
+  margin-top: -35px;
+}
+
+@media (min-width: 768px) {
+  .list-books--init-loading_animation,
+  .list-books--loading_animation {
+    width: 100px;
+    height: 100px;
+    margin-left: -50px;
+    margin-top: -50px;
+  }
+}
+
+@media (min-width: 992px) {
+  .list-books--init-loading_animation,
+  .list-books--loading_animation {
+    width: 140px;
+    height: 140px;
+    margin-left: -70px;
+    margin-top: -70px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .list-books--init-loading_animation,
+  .list-books--loading_animation {
+    width: 180px;
+    height: 180px;
+    margin-left: -90px;
+    margin-top: -90px;
+  }
 }
 
 .list-books--loading_animation {
