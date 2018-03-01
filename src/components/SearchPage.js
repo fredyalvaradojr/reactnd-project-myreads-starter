@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import * as BooksAPI from '../BooksAPI';
 import BookTemplate from './BookTemplate';
 
@@ -26,10 +27,12 @@ class SearchPage extends Component {
   }
 
   render() {
-    let bookSearchList = '';
+    let bookSearchList = [];
+
     if(this.state.searchResults && this.state.searchResults.length > 0) {
       bookSearchList = this.state.searchResults.map(b => <BookTemplate key={b.id} updateReadingList={(book, e) => this.props.updateReadingList(book, e)} bookListInformation={this.props.BookList} thisBookInfo={b} />);
     }
+
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -51,6 +54,11 @@ class SearchPage extends Component {
       </div>
     )
   }
+}
+
+SearchPage.PropTypes = {
+  BookList: PropTypes.array.isRequired,
+  updateReadingList: PropTypes.func.isRequired
 }
 
 export default SearchPage;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import BookTemplate from './BookTemplate';
 
 const ListBookContent = (props) => {
@@ -12,6 +13,12 @@ const ListBookContent = (props) => {
       </div>
     </div>
   );
+}
+
+ListBookContent.PropTypes = {
+  bookStateList: PropTypes.array.isRequired,
+  title: PropTypes.string.isRequired,
+  updateReadingList: PropTypes.func.isRequired
 }
 
 export default ListBookContent;

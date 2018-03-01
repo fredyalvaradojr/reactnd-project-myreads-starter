@@ -1,16 +1,17 @@
 import React from 'react';
+import PropsType from 'prop-types';
 
 const BookTemplate = (props) => {
-  let shelfStatus;
+  let shelfStatus = 'none';
   const thumbnail = props.thisBookInfo.imageLinks !== undefined ? props.thisBookInfo.imageLinks.thumbnail : '';
   const authors = props.thisBookInfo.authors !== undefined ? props.thisBookInfo.authors.map( (author, index) => (index === (props.thisBookInfo.authors.length-1)) ? `${author}` : `${author}, ` ) : '' ;
 
   if (props.bookListInformation !== undefined) {
     const shelfStatusItem = props.bookListInformation.filter(b =>  b.title === props.thisBookInfo.title );
-    shelfStatus = shelfStatusItem.length === 0 ? 'none' : shelfStatusItem[0].shelf;
+    shelfStatus = shelfStatusItem.length === 0 ? shelfStatus : shelfStatusItem[0].shelf;
   }
   else {
-    shelfStatus = props.thisBookInfo.shelf !== undefined ? props.thisBookInfo.shelf : 'none';
+    shelfStatus = props.thisBookInfo.shelf !== undefined ? props.thisBookInfo.shelf : shelfStatus;
   }
 
   return (
@@ -33,6 +34,12 @@ const BookTemplate = (props) => {
       </div>
     </li>
   );
+}
+
+BookTemplate.PropsType = {
+  bookListInformation: PropsType.array,
+  thisBookInfo: PropsType.array.isRequired,
+  updateReadingList: PropsType.func.isRequired
 }
 
 export default BookTemplate;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import ListBookContent from './ListBookContent';
 import '../App.css';
 
@@ -34,5 +35,10 @@ const ListBook = (props) =>  {
     </div>
   );
 };
+
+ListBook.PropTypes = {
+  bookStateList: PropTypes.array.isRequired,
+  updateReadingList: PropTypes.func.isRequired
+}
 
 export default ListBook;
