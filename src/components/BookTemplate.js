@@ -3,15 +3,15 @@ import PropsType from 'prop-types';
 
 const BookTemplate = (props) => {
   let shelfStatus = 'none';
-  const thumbnail = props.thisBookInfo.imageLinks !== undefined ? props.thisBookInfo.imageLinks.thumbnail : '';
-  const authors = props.thisBookInfo.authors !== undefined ? props.thisBookInfo.authors.map( (author, index) => (index === (props.thisBookInfo.authors.length-1)) ? `${author}` : `${author}, ` ) : '' ;
+  const thumbnail = props.thisBookInfo.imageLinks ? props.thisBookInfo.imageLinks.thumbnail : '';
+  const authors = props.thisBookInfo.authors ? props.thisBookInfo.authors.join(', ') : '';
 
-  if (props.bookListInformation !== undefined) {
+  if (props.bookListInformation) {
     const shelfStatusItem = props.bookListInformation.filter(b =>  b.title === props.thisBookInfo.title );
     shelfStatus = shelfStatusItem.length === 0 ? shelfStatus : shelfStatusItem[0].shelf;
   }
   else {
-    shelfStatus = props.thisBookInfo.shelf !== undefined ? props.thisBookInfo.shelf : shelfStatus;
+    shelfStatus = props.thisBookInfo.shelf ? props.thisBookInfo.shelf : shelfStatus;
   }
 
   return (
